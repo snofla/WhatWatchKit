@@ -1,6 +1,11 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
+//
+//  What.swift
+//
+//
+//  Created by Alfons Hoogervorst on 27/07/2024.
+//
 import Foundation
+import CoreImage
 import CoreML
 
 public struct What {
@@ -11,7 +16,20 @@ public struct What {
     /// level.
     public static func categoryOfWatch(at url: URL) async throws -> [Result] {
         let input = try WhatWatchModelInput(imageAt: url)
-        let modelResult: WhatWatchModelOutput = try await self.watchModel.prediction(input: input)
+        let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
+        let ourResult = [Result](modelResult)
+            .sorted(by: { lhs, rhs in
+                return lhs.confidence > rhs.confidence
+            })
+        return ourResult
+    }
+    
+    public static func categoryOfWatch(in image: CIImage) async throws -> [Result] {
+        guard let image = CIContext().createCGImage(image, from: image.extent) else {
+            throw NSError(domain: #fileID, code: #line, userInfo: [NSLocalizedDescriptionKey: "Error creating CGImage"])
+        }
+        let input = try WhatWatchModelInput(imageWith: image)
+        let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
         let ourResult = [Result](modelResult)
             .sorted(by: { lhs, rhs in
                 return lhs.confidence > rhs.confidence
@@ -19,15 +37,16 @@ public struct What {
         return ourResult
     }
 
+
 }
 
 
 extension What {
     
     /// Model initialiser for recognizing watches.
-    static let watchModel = {
-        let watchModel = try! WhatWatchModel()
-        return watchModel
+    fileprivate static let model = {
+        let whatModel = try! WhatWatchModel()
+        return whatModel
     }()
     
 }
