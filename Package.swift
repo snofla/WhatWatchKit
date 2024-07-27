@@ -18,7 +18,8 @@ let package = Package(
         .target(
             name: "WhatWatchKit",
             resources: [
-                .copy("Resources/WhatWatchModel.mlmodelc")
+                .copy("Resources/WhatWatchModel.mlmodelc"),
+                .copy("Resources/WhetherWatchModel.mlmodelc")
             ]
         ),
         .testTarget(
