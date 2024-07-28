@@ -66,7 +66,7 @@ public struct Whether {
                 width: inputImageSize.width,
                 height: inputImageSize.height
             ),
-            confidence: confidences,
+            confidences: confidences,
             coordinates: coordinates
         )
     }
@@ -120,7 +120,7 @@ extension Whether {
         /// Size of image created for model
         public let size: CGSize
         /// List of confidences for each detected object
-        public let confidence: [Double]
+        public let confidences: [Double]
         /// List of coordinates for each detected object
         public let coordinates: [Rect]
     }
