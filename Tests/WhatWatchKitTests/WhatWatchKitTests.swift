@@ -89,7 +89,7 @@ final class WhatWatchKitTests: XCTestCase {
     }
 
     func imageURL(for name: String) -> URL? {
-        Bundle.module.url(forResource: name, withExtension: "png", subdirectory: "Resources")
+        Bundle.module.url(forResource: name, withExtension: "png")
     }
     
 }

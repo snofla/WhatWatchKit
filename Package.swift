@@ -25,7 +25,7 @@ let package = Package(
         .testTarget(
             name: "WhatWatchKitTests",
             dependencies: ["WhatWatchKit"],
-            resources: [.copy("Resources")]
+            resources: [.process("Resources")]
         ),
     ]
 )
