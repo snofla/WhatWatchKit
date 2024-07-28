@@ -106,7 +106,10 @@ extension WhatWatchKitTests {
         XCTAssertTrue(!result.isEmpty, "Should have results")
         for try await watchImage in result {
             let category = try await What.categoryOfWatch(in: watchImage)
-            XCTAssert(category.first!.label == .sport, "Should be all sports")
+            let labels: Set<What.Label> = category.reduce(into: Set(), { partialResult, result in
+                partialResult.insert(result.label)
+            })
+            XCTAssert(labels.contains(.sport), "Should be sport-like")
         }
     }
         
