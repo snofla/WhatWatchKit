@@ -5,7 +5,7 @@ A research project to detect and identify watches using CoreML. It uses two mode
 * `WhetherWatchModel`: an object detection neural network trained on open source data;
 * `WhatWatchModel`: a classifier neural network trained on own data;
 
-The why: I don't know. Working with and training neural networks require very domain specific knowledge, and since I know a bit about watches, and after having visited the [WWDC24](https://www.instagram.com/p/C8Axv5Us3Mr/), the puzzle pieces fell in the right place.
+The why: I don't know. Working with and training neural networks requires very domain-specific knowledge, and since I know a bit about watches, and after having visited the [WWDC24](https://www.instagram.com/p/C8Axv5Us3Mr/), the puzzle pieces fell in the right place.
 
 Useful? Maybe. Entertaining? Sure is. I mean like: 
 
@@ -49,7 +49,7 @@ guard result.count > 0 else {
 
 ```
 
-Additionallly `Whether` has a function to extract a watch's image from the original image. The result can then be submitted to the functions in the `What` namespace.
+Additionally `Whether` has a function to extract a watch's image from the original image. The result can then be submitted to the functions in the `What` namespace.
 
 *Example 2* **`Whether.extractWatch(at:from:) async throws -> CGImage?`**
 
@@ -72,7 +72,7 @@ for try await watchImage in result {
 
 ### `What` namespace
 
-The `What` namespace has functions that return the type of a watch in an image. Like in the `Whether` namespace the functions has overloads that accept either a URL to an image or the image itself. 
+The `What` namespace has functions that return the type of a watch in an image. Like in the `Whether` namespace the functions have overloads that accept either a URL to an image or the image itself. 
 
 The functions return an array of `Category` structs, and is sorted by the confidence of the estimation of the watch's category.
 
@@ -88,7 +88,7 @@ if !result.isEmpty {
 }
 
 let categories = try await What.categoryOfWatch(in: watchImage)
-print("Watch is a "\(categories.first?.label)")
+print("The watch is classified as "\(categories.first?.label)")
 ```
 
 
@@ -108,7 +108,7 @@ Here's the neural network detecting and locating a couple of my watches correctl
 
 ### WhatWatchModel
 
-The image classification neural network is trained on my own data. The accuracy is around the 60% - 100%, naturally because categorising a watch also involves a bit of personal taste: 
+The image classification neural network is trained on my own data. The accuracy ranges from 60% to 100%, which is expected given that categorizing watches involves some subjectivity: 
 
 | Training                                                     | Validation                                                   |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
