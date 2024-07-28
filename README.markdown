@@ -5,7 +5,7 @@ A research project to detect and identify watches using CoreML. It uses two mode
 * `WhetherWatchModel`: an object detection neural network trained on open source data;
 * `WhatWatchModel`: a classifier neural network trained on own data;
 
-The why: I don't know. Working with and training neural networks require very domain specific knowledge, and since I know a bit of watches, and after having visited the [WWDC24](https://www.instagram.com/p/C8Axv5Us3Mr/), the puzzle pieces fell in the right place.
+The why: I don't know. Working with and training neural networks require very domain specific knowledge, and since I know a bit about watches, and after having visited the [WWDC24](https://www.instagram.com/p/C8Axv5Us3Mr/), the puzzle pieces fell in the right place.
 
 Useful? Maybe. Entertaining? Sure is. I mean like: 
 
