@@ -8,6 +8,7 @@ import Foundation
 import CoreImage
 import CoreML
 
+
 public struct What {
     
     /// Guesses the watch from the image retrieved from a URL.
@@ -24,10 +25,22 @@ public struct What {
         return ourResult
     }
     
+    /// Guesses the watch from an image.
+    /// - Parameter url: URL to retrieve image from
+    /// - Returns: Array of results, sorted by their confidence
+    /// level.
     public static func categoryOfWatch(in image: CIImage) async throws -> [Result] {
         guard let image = CIContext().createCGImage(image, from: image.extent) else {
             throw NSError(domain: #fileID, code: #line, userInfo: [NSLocalizedDescriptionKey: "Error creating CGImage"])
         }
+        return try await Self.categoryOfWatch(in: image)
+    }
+
+    /// Guesses the watch from an image.
+    /// - Parameter url: URL to retrieve image from
+    /// - Returns: Array of results, sorted by their confidence
+    /// level.
+    public static func categoryOfWatch(in image: CGImage) async throws -> [Result] {
         let input = try WhatWatchModelInput(imageWith: image)
         let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
         let ourResult = [Result](modelResult)
@@ -36,7 +49,6 @@ public struct What {
             })
         return ourResult
     }
-
 
 }
 
@@ -85,6 +97,7 @@ extension What {
 
 extension Array where Element == What.Result {
     
+    /// Convert a what watch model output to an array of results
     init(_ modelOutput: WhatWatchModelOutput) {
         let elements: [What.Result] = modelOutput.targetProbability.map { kv in
             return .init(label: .init(kv.key), confidence: kv.value)
