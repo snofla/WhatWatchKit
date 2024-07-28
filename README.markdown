@@ -72,7 +72,7 @@ for try await watchImage in result {
 
 ### `What` namespace
 
-The `What` namespace has functions that return the type of a watch in an image. Like in the `Whether` namespace the functions has overlkoads that accept either a URL to an image or the image itself. 
+The `What` namespace has functions that return the type of a watch in an image. Like in the `Whether` namespace the functions has overloads that accept either a URL to an image or the image itself. 
 
 The functions return an array of `Category` structs, and is sorted by the confidence of the estimation of the watch's category.
 
