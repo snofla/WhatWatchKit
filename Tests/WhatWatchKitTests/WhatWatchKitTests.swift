@@ -98,10 +98,22 @@ final class WhatWatchKitTests: XCTestCase {
 
 extension WhatWatchKitTests {
     
-    func test_Whether() async throws {
-        let result = try await Whether.anyWatches(at: self.imageURL(for: "diver_100")!)
-        print("")
+    /// Tests whether our image has multiple watches, and whether
+    /// they are all sports watches (they're my Citizen Tsuyosas)
+    func test_Whether_All_Sports() async throws {
+        let image = CIImage(contentsOf: self.imageURL(for: "all_sport")!)!
+        let result = try await Whether.anyWatches(in: image)
+        XCTAssertTrue(!result.isEmpty, "Should have results")
+        for try await watchImage in result {
+            let category = try await What.categoryOfWatch(in: watchImage)
+            XCTAssert(category.first!.label == .sport, "Should be all sports")
+        }
     }
-    
+        
+    func test_Whether_Not_A_Watch() async throws {
+        let image = CIImage(contentsOf: self.imageURL(for: "not_a_watch")!)!
+        let result = try await Whether.anyWatches(in: image)
+        XCTAssertTrue(result.isEmpty, "Should not have results")
+    }
     
 }
