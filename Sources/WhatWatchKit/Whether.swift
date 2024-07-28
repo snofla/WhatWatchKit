@@ -19,7 +19,7 @@ public struct Whether {
     
     /// Check whether an image has watches. This uses a separate
     /// object detection neural network.
-    public static func anyWatches(in cImage: CIImage) async throws -> Result {
+    public static func anyWatches(in cImage: CIImage) async throws -> Watches {
         let image: CGImage? = await Task {
             let context = CIContext()
             return context.createCGImage(cImage, from: cImage.extent)
@@ -32,7 +32,7 @@ public struct Whether {
 
     /// Check whether an image has watches. This uses a separate
     /// object detection neural network.
-    public static func anyWatches(in image: CGImage) async throws -> Result {
+    public static func anyWatches(in image: CGImage) async throws -> Watches {
         let input = try WhetherWatchModelInput(imageWith: image)
         let modelResult = try await self.model.prediction(input: input)
         let confidences: [Double] = (0..<modelResult.confidence.count).map { index in
@@ -67,7 +67,7 @@ public struct Whether {
             )
             return rect
         }
-        return Result(
+        return Watches(
             image: image,
             size: .init(
                 width: inputImageSize.width,
@@ -79,17 +79,17 @@ public struct Whether {
     }
     
     /// Extracts a watch from a result
-    public static func extractWatch(at index: Int, from result: Result) async throws -> CGImage? {
-        guard index < result.coordinates.count else {
+    public static func extractWatch(at index: Int, from watches: Watches) async throws -> CGImage? {
+        guard index < watches.coordinates.count else {
             return nil
         }
-        let original = CGSize(width: result.image.width, height: result.image.height)
-        let model = CGSize(width: result.size.width, height: result.size.height)
+        let original = CGSize(width: watches.image.width, height: watches.image.height)
+        let model = CGSize(width: watches.size.width, height: watches.size.height)
         // scale up model coords to original image coords
-        let rect = result.coordinates[index]
+        let rect = watches.coordinates[index]
             .applying(.init(scaleX: original.width / model.width, y: original.height / model.height))
         let cropped = await Task {
-            return result.image.cropping(to: rect)
+            return watches.image.cropping(to: rect)
         }.value
         guard let cropped = cropped else {
             return nil
@@ -112,7 +112,7 @@ extension Whether {
 
 extension Whether {
     
-    public struct Result {
+    public struct Watches {
         
         public var count: Int {
             return self.coordinates.count
@@ -141,7 +141,7 @@ extension Whether {
 }
 
 
-extension Whether.Result: AsyncSequence {
+extension Whether.Watches: AsyncSequence {
 
     public typealias Element = CGImage
     
@@ -168,7 +168,7 @@ extension Whether.Result: AsyncSequence {
             return image
         }
 
-        let result: Whether.Result
+        let result: Whether.Watches
         var current: Int
     }
     

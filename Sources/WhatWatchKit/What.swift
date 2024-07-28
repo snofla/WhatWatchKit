@@ -15,10 +15,10 @@ public struct What {
     /// - Parameter url: URL to retrieve image from
     /// - Returns: Array of results, sorted by their confidence
     /// level.
-    public static func categoryOfWatch(at url: URL) async throws -> [Result] {
+    public static func categoryOfWatch(at url: URL) async throws -> [Category] {
         let input = try WhatWatchModelInput(imageAt: url)
         let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
-        let ourResult = [Result](modelResult)
+        let ourResult = [Category](modelResult)
             .sorted(by: { lhs, rhs in
                 return lhs.confidence > rhs.confidence
             })
@@ -29,7 +29,7 @@ public struct What {
     /// - Parameter url: URL to retrieve image from
     /// - Returns: Array of results, sorted by their confidence
     /// level.
-    public static func categoryOfWatch(in image: CIImage) async throws -> [Result] {
+    public static func categoryOfWatch(in image: CIImage) async throws -> [Category] {
         guard let image = CIContext().createCGImage(image, from: image.extent) else {
             throw NSError(domain: #fileID, code: #line, userInfo: [NSLocalizedDescriptionKey: "Error creating CGImage"])
         }
@@ -40,10 +40,10 @@ public struct What {
     /// - Parameter url: URL to retrieve image from
     /// - Returns: Array of results, sorted by their confidence
     /// level.
-    public static func categoryOfWatch(in image: CGImage) async throws -> [Result] {
+    public static func categoryOfWatch(in image: CGImage) async throws -> [Category] {
         let input = try WhatWatchModelInput(imageWith: image)
         let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
-        let ourResult = [Result](modelResult)
+        let ourResult = [Category](modelResult)
             .sorted(by: { lhs, rhs in
                 return lhs.confidence > rhs.confidence
             })
@@ -66,7 +66,7 @@ extension What {
 
 extension What {
     
-    public enum Category: String {
+    public enum Label: String {
         case unknown
         case chronograph
         case diver
@@ -87,19 +87,19 @@ extension What {
         
     }
     
-    public struct Result {
-        let label: What.Category
+    public struct Category {
+        let label: What.Label
         let confidence: Double
     }
     
 }
 
 
-extension Array where Element == What.Result {
+extension Array where Element == What.Category {
     
     /// Convert a what watch model output to an array of results
     init(_ modelOutput: WhatWatchModelOutput) {
-        let elements: [What.Result] = modelOutput.targetProbability.map { kv in
+        let elements: [What.Category] = modelOutput.targetProbability.map { kv in
             return .init(label: .init(kv.key), confidence: kv.value)
         }
         self = elements
