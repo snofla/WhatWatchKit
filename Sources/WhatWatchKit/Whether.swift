@@ -173,3 +173,20 @@ extension Whether.Result: AsyncSequence {
     }
     
 }
+
+
+
+extension MLMultiArray {
+    
+    subscript(coordAt index: Int) -> Whether.Rect? {
+        guard self.count > index else {
+            return nil
+        }
+        let x = self[[index, 0] as [NSNumber]].doubleValue
+        let y = self[[index, 1] as [NSNumber]].doubleValue
+        let w = self[[index, 2] as [NSNumber]].doubleValue
+        let h = self[[index, 3] as [NSNumber]].doubleValue
+        return .init(x: x, y: y, width: w, height: h)
+    }
+    
+}
