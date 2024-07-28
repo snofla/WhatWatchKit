@@ -1,6 +1,7 @@
 # WhatWatchKit
 
 ![Build](https://github.com/snofla/WhatWatchKit/actions/workflows/swift.yml/badge.svg)
+![SPM](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)
 
 
 A research project to detect and identify watches using CoreML. It uses two models that I trained over a couple of weeks: 
@@ -21,7 +22,17 @@ For specifics see the section below.
 
 ## Requirements
 
+iOS 17 / macOS 14. With Xcode 15.2 the tests do not run on the simulator. They work fine running under macOS.
+
+
 ## Installation
+
+Add the following dependency to your **Package.swift** file:
+
+```swift
+.package(url: "https://github.com/snofla/WhatWatchKit.git", from: "1.0.0")
+```
+
 
 ## Usage
 
