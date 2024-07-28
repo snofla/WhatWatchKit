@@ -42,29 +42,22 @@ public struct Whether {
             let extent = CIImage(cvPixelBuffer: input.image).extent
             return .init(width: extent.width, height: extent.height)
         }()
-        let coordinates: [Rect] = (0..<modelResult.coordinatesShapedArray.count).map { index in
-            // coordinates are centered in neural network's input image
-            let coordinates = modelResult.coordinates
-            let x = coordinates[0].doubleValue
-            let y = coordinates[1].doubleValue
-            let w = coordinates[2].doubleValue
-            let h = coordinates[3].doubleValue
+        let numberOfCoords = modelResult.coordinatesShapedArray.count
+        let coordinates: [Rect] = (0..<numberOfCoords).compactMap { index in
+            // rectangle returned by model
+            guard let modelRect = modelResult.coordinates[coordAt: index] else {
+                return nil
+            }
+            let size = modelRect.size
             // center, and scale width and height
-            let rect = CGRect(
-                origin: .init(
-                    x: x - (w / 2),
-                    y: y - (h / 2)
-                ),
-                size: .init(
-                    width: w,
-                    height: h
+            let rect = modelRect
+                .offsetBy(dx: -size.width / 2, dy: -size.height / 2)
+                .applying(
+                    .init(
+                        scaleX: inputImageSize.width,
+                        y: inputImageSize.height
+                    )
                 )
-            ).applying(
-                .init(
-                    scaleX: inputImageSize.width,
-                    y: inputImageSize.height
-                )
-            )
             return rect
         }
         return Watches(
