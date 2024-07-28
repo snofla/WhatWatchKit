@@ -118,5 +118,19 @@ extension WhatWatchKitTests {
         let result = try await Whether.anyWatches(in: image)
         XCTAssertTrue(result.isEmpty, "Should not have results")
     }
-    
+
+    /// Checks a distance photo with a GMT watch
+    /// Image from https://unsplash.com/photos/person-wearing-silver-link-bracelet-round-analog-watch-WSOaS0Eef_w
+    func test_Whether_Gmt_Far() async throws {
+        let image = CIImage(contentsOf: self.imageURL(for: "gmt_far")!)!
+        let result = try await Whether.anyWatches(in: image)
+        XCTAssertTrue(result.count == 1, "Should have one image")
+        let watchImage_ = try await Whether.extractWatch(at: 0, from: result)
+        XCTAssertNotNil(watchImage_)
+        let watchImage = watchImage_!
+        let category = try await What.categoryOfWatch(in: watchImage)
+        XCTAssertTrue(category.count > 0, "Should have categories")
+        XCTAssertTrue(category[0].label == .gmt, "Should have GMT")
+    }
+
 }
