@@ -100,11 +100,11 @@ print("The watch is classified as "\(categories.first?.label)")
 This object detection model is trained on [Open Source](https://creativecommons.org/licenses/by/4.0/) data provided here: [Watches detection Computer Vision Project](https://universe.roboflow.com/nadezhda-jddr9/watches-detection). It seems to be fairly accurate. 
 This is what CreateML shows:
 
-<img src="./Documentation/Whether-Training.png" alt="Whether-Training" style="zoom:50%;" />
+<img src="./Documentation/Whether-Training.png" alt="Whether-Training" width="50%" />
 
 Here's the neural network detecting and locating a couple of my watches correctly: 
 
-<img src="./Documentation/Citizens.png" alt="Citizens" style="zoom:50%;" />
+<img src="./Documentation/Citizens.png" alt="Citizens" width="50%" />
 
 ### WhatWatchModel
 
@@ -112,13 +112,13 @@ The image classification neural network is trained on my own data. The accuracy 
 
 | Training                                                     | Validation                                                   |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="./Documentation/Classifier-Full-Training.png" alt="Classifier-Full-Training" style="zoom:33%;" /> | <img src="./Documentation/Classifier-Training-Validation.png" alt="Classifier-Training-Validation" style="zoom: 33%;" /> |
+| <img src="./Documentation/Classifier-Full-Training.png" alt="Classifier-Full-Training" width="80%" /> | <img src="./Documentation/Classifier-Training-Validation.png" alt="Classifier-Training-Validation" width="80%" /> |
 
 
 
 CreateML shows:
 
-![Classifier-Training](./Documentation/Classifier-Training.png)
+<img src="./Documentation/Classifier-Training.png" alt="Classifier-Training" width="50%;" />
 
 ## License
 
