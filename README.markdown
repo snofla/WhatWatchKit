@@ -1,5 +1,8 @@
 # WhatWatchKit
 
+![Build](https://github.com/snofla/WhatWatchKit/actions/workflows/swift.yml/badge.svg)
+
+
 A research project to detect and identify watches using CoreML. It uses two models that I trained over a couple of weeks: 
 
 * `WhetherWatchModel`: an object detection neural network trained on open source data;
