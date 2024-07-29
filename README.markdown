@@ -115,7 +115,7 @@ The `What` namespace has functions that return the type of a watch in an image. 
 
 The functions return an array of `Category` structs, and is sorted by the confidence of the estimation of the watch's category.
 
-*Example 4* **`What.categoryOfWatch(in: watchImage) async throws -> Watches`**
+*Example 4* **`What.categoryOfWatch(in: watchImage) async throws -> [Category]`**
 
 ```swift
 // Function definition: public static func categoryOfWatches(in cImage: CIImage) async throws -> [Category]
@@ -157,7 +157,9 @@ The image classification neural network is trained on my own data. The accuracy 
 
 CreateML shows:
 
-<img src="./Documentation/Classifier-Training.png" alt="Classifier-Training" width="50%;" />
+| Training                                                     | Validation (Wrong classification in red)                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="./Documentation/Classifier-Training.png" alt="Classifier-Training" width="100%;" /> | <img src="./Documentation/What-Validation.png" alt="Classifier-Training" width="80%;" /> |
 
 
 
