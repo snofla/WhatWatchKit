@@ -20,9 +20,13 @@ xcrun coremlcompiler generate --language Swift ../WhetherWatch.mlmodel Models/
 
 For specifics see the section below.
 
+
+
 ## Requirements
 
 iOS 17 / macOS 14. With Xcode 15.2 the tests do not run on the simulator. They work fine running under macOS.
+
+
 
 
 ## Installation
@@ -34,9 +38,12 @@ Add the following dependency to your **Package.swift** file:
 ```
 
 
+
 ## Usage
 
-The package has two namespaces `Whether` and `What`. 
+The package has two namespaces `Whether` and `What`. For a good overview of what is possible, please also check the [unit tests](blob/main/Tests/WhatWatchKitTests/WhatWatchKitTests.swift). 
+
+
 
 ### `Whether` namespace
 
@@ -63,7 +70,7 @@ guard result.count > 0 else {
 
 ```
 
-Additionally `Whether` has a function to extract a watch's image from the original image. The result can then be submitted to the functions in the `What` namespace.
+Additionally `Whether` has a function to extract a watch's image from the original image. This image can then be submitted to the functions in the `What` namespace.
 
 *Example 2* **`Whether.extractWatch(at:from:) async throws -> CGImage?`**
 
@@ -76,10 +83,28 @@ guard result.count > 0 else {
   throw // some error
 }
 
-for try await watchImage in result {
-  // Do something with the returned image
+// Get first image (a CGImage)
+let watchImage = try await Whether.extractWatch(at: 0, from: result)
+
+```
+
+The result returned by `Whether`, `Whether.Watches`, is also an `AsyncSequence`:
+
+*Example 3* **`Whether`'s `Watches` result accessed as an `AsyncSequence`**
+
+```swift
+// Extension definition: extension Whether.Watches: AsyncSequence
+
+// Detect watches in image
+let result = try await Whether.anyWatches(in: image)
+guard result.count > 0 else {
+  throw // some error
 }
 
+for try await watchImage in result {
+  // each watchImage is a CGImage, and can be used in the What functions
+  let category = try await What.categoryOfWatch(in: watchImage)
+}
 ```
 
 
@@ -90,10 +115,10 @@ The `What` namespace has functions that return the type of a watch in an image. 
 
 The functions return an array of `Category` structs, and is sorted by the confidence of the estimation of the watch's category.
 
-Example 1 **`What.anyWatches(in:) async throws -> Watches`**
+*Example 4* **`What.categoryOfWatch(in: watchImage) async throws -> Watches`**
 
 ```swift
-// Function definition: public static func anyWatches(in cImage: CIImage) async throws -> Watches
+// Function definition: public static func categoryOfWatches(in cImage: CIImage) async throws -> [Category]
 
 let image = CIImage(contentsOf: URL(string: "...")!)!
 let result = try await Whether.anyWatches(in: image)
@@ -101,7 +126,7 @@ if !result.isEmpty {
   
 }
 
-let categories = try await What.categoryOfWatch(in: watchImage)
+let category = try await What.categoryOfWatch(in: watchImage)
 print("The watch is classified as "\(categories.first?.label)")
 ```
 
@@ -133,6 +158,8 @@ The image classification neural network is trained on my own data. The accuracy 
 CreateML shows:
 
 <img src="./Documentation/Classifier-Training.png" alt="Classifier-Training" width="50%;" />
+
+
 
 ## License
 
