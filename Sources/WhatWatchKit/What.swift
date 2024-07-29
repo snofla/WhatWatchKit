@@ -88,8 +88,8 @@ extension What {
     }
     
     public struct Category {
-        let label: What.Label
-        let confidence: Double
+        public let label: What.Label
+        public let confidence: Double
     }
     
 }
