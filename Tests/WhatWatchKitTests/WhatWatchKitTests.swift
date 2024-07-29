@@ -109,6 +109,12 @@ extension WhatWatchKitTests {
             let labels: Set<What.Label> = category.reduce(into: Set(), { partialResult, result in
                 partialResult.insert(result.label)
             })
+            XCTAssertTrue(category.first?.label == .sport, "Should be a sport watch")
+            #if WHAT_WATCH_MODEL_SHOULD_BE_RETRAINED
+            if let label = category.first?.label, label != .sport {
+                print("Warning: one image is not confidently a sport")
+            }
+            #endif // WHAT_WATCH_MODEL_SHOULD_BE_RETRAINED
             XCTAssert(labels.contains(.sport), "Should be sport-like")
         }
     }
