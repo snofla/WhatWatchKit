@@ -41,7 +41,7 @@ Add the following dependency to your **Package.swift** file:
 
 ## Usage
 
-The package has two namespaces `Whether` and `What`. For a good overview of what is possible, please also check the [unit tests](blob/main/Tests/WhatWatchKitTests/WhatWatchKitTests.swift). 
+The package has two namespaces `Whether` and `What`. For a good overview of what is possible, please also check the [unit tests](https://github.com/snofla/WhatWatchKit/blob/main/Tests/WhatWatchKitTests/WhatWatchKitTests.swift). 
 
 
 
