@@ -12,6 +12,9 @@ let package = Package(
             name: "WhatWatchKit",
             targets: ["WhatWatchKit"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0")),
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
@@ -24,7 +27,10 @@ let package = Package(
         ),
         .testTarget(
             name: "WhatWatchKitTests",
-            dependencies: ["WhatWatchKit"],
+            dependencies: [
+                "WhatWatchKit",
+                .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
+            ],
             resources: [.process("Resources")]
         ),
     ]
