@@ -16,6 +16,17 @@ import UIKit
 
 
 public struct Whether {
+
+    /// Check whether an image at a url has watches. This uses a separate
+    /// object detection neural network.
+    public static func anyWatches(in imageURL: URL) async throws -> Watches {
+        guard let image = await Task(operation: {
+            return CIImage(contentsOf: imageURL)
+        }).value else {
+            throw NSError(domain: #fileID, code: #line, userInfo: [NSLocalizedDescriptionKey: "Error getting image from url \(imageURL)"])
+        }
+        return try await Self.anyWatches(in: image)
+    }
     
     /// Check whether an image has watches. This uses a separate
     /// object detection neural network.
