@@ -73,8 +73,8 @@ public struct Whether {
             return rect
         }
         return Watches(
-            image: image,
-            size: .init(
+            originalImage: image,
+            modelImageSize: .init(
                 width: inputImageSize.width,
                 height: inputImageSize.height
             ),
@@ -88,13 +88,18 @@ public struct Whether {
         guard index < watches.coordinates.count else {
             return nil
         }
-        let original = CGSize(width: watches.image.width, height: watches.image.height)
-        let model = CGSize(width: watches.size.width, height: watches.size.height)
+        let original = CGSize(width: watches.originalImage.width, height: watches.originalImage.height)
+        let model = CGSize(width: watches.modelImageSize.width, height: watches.modelImageSize.height)
         // scale up model coords to original image coords
         let rect = watches.coordinates[index]
-            .applying(.init(scaleX: original.width / model.width, y: original.height / model.height))
+            .applying(
+                .init(
+                    scaleX: original.width / model.width, 
+                    y: original.height / model.height
+                )
+            )
         let cropped = await Task {
-            return watches.image.cropping(to: rect)
+            return watches.originalImage.cropping(to: rect)
         }.value
         guard let cropped = cropped else {
             return nil
@@ -108,8 +113,8 @@ public struct Whether {
 extension Whether {
     
     fileprivate static let model = {
-        let whatModel = try! WhetherWatchModel()
-        return whatModel
+        let whetherModel = try! WhetherWatchModel()
+        return whetherModel
     }()
 
 }
@@ -128,9 +133,9 @@ extension Whether {
         }
         
         /// Original image
-        public let image: CGImage
+        public let originalImage: CGImage
         /// Size of image created for model
-        public let size: CGSize
+        public let modelImageSize: CGSize
         /// List of confidences for each detected object
         public let confidences: [Double]
         /// List of coordinates for each detected object
