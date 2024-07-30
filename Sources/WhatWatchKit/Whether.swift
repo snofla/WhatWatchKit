@@ -50,8 +50,9 @@ public struct Whether {
             return modelResult.confidence[index].doubleValue
         }
         let inputImageSize: CGSize = {
-            let extent = CIImage(cvPixelBuffer: input.image).extent
-            return .init(width: extent.width, height: extent.height)
+            let width = CVPixelBufferGetWidth(input.image)
+            let height = CVPixelBufferGetHeight(input.image)
+            return .init(width: width, height: height)
         }()
         let numberOfCoords = modelResult.coordinatesShapedArray.count
         let coordinates: [Rect] = (0..<numberOfCoords).compactMap { index in
