@@ -13,13 +13,23 @@ import OHHTTPStubsSwift
 
 
 final class WhatWatchKitNetworkTests: XCTestCase {
+    
+    class override func setUp() {
+        HTTPStubs.setEnabled(true)
+    }
+    
+    class override func tearDown() {
+        HTTPStubs.removeAllStubs()
+        HTTPStubs.setEnabled(false)
+    }
 
     override func setUpWithError() throws {
-        HTTPStubs.setEnabled(true)
+        try super.setUpWithError()
     }
 
     override func tearDownWithError() throws {
-        HTTPStubs.setEnabled(false)
+        try super.tearDownWithError()
+        HTTPStubs.removeAllStubs()
     }
 
 }
@@ -80,6 +90,56 @@ extension WhatWatchKitNetworkTests {
 
 }
 
+
+extension WhatWatchKitNetworkTests {
+    
+    func test_Whether_Any_Watches_Good() async throws {
+        self.addGoodStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let result = try await Whether.anyWatches(in: path)
+        XCTAssertTrue(result.count > 0, "Should have \(result.count) watches")
+    }
+    
+    func test_Whether_Any_Watches_Server_Error() async throws {
+        self.addServerErrorStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let failure = expectation(description: "Should fail")
+        do {
+            _ = try await Whether.anyWatches(in: path)
+            XCTFail("This should fail")
+        } catch {
+            failure.fulfill()
+        }
+        await fulfillment(of: [failure], timeout: 1)
+    }
+
+    func test_Whether_Any_Watches_Client_Error() async throws {
+        self.addClientErrorStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let failure = expectation(description: "Should fail")
+        do {
+            _ = try await Whether.anyWatches(in: path)
+            XCTFail("This should fail")
+        } catch {
+            failure.fulfill()
+        }
+        await fulfillment(of: [failure], timeout: 1)
+    }
+
+    func test_Whether_Any_Watches_Server_Junk_Error() async throws {
+        self.addServerReturningJunkStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let failure = expectation(description: "Should fail")
+        do {
+            _ = try await Whether.anyWatches(in: path)
+            XCTFail("This should fail")
+        } catch {
+            failure.fulfill()
+        }
+        await fulfillment(of: [failure], timeout: 1)
+    }
+
+}
 
 extension WhatWatchKitNetworkTests {
     
