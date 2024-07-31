@@ -83,6 +83,56 @@ extension WhatWatchKitNetworkTests {
 
 extension WhatWatchKitNetworkTests {
     
+    func test_Whether_Any_Watches_Good() async throws {
+        self.addGoodStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let result = try await Whether.anyWatches(in: path)
+        XCTAssertTrue(result.count == 7, "Should have 7 watches, got \(result.count)")
+    }
+    
+    func test_Whether_Any_Watches_Server_Error() async throws {
+        self.addServerErrorStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let failure = expectation(description: "Should fail")
+        do {
+            _ = try await Whether.anyWatches(in: path)
+            XCTFail("This should fail")
+        } catch {
+            failure.fulfill()
+        }
+        await fulfillment(of: [failure], timeout: 1)
+    }
+
+    func test_Whether_Any_Watches_Client_Error() async throws {
+        self.addClientErrorStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let failure = expectation(description: "Should fail")
+        do {
+            _ = try await Whether.anyWatches(in: path)
+            XCTFail("This should fail")
+        } catch {
+            failure.fulfill()
+        }
+        await fulfillment(of: [failure], timeout: 1)
+    }
+
+    func test_Whether_Any_Watches_Server_Junk_Error() async throws {
+        self.addServerReturningJunkStub(for: "all_sport")
+        let path = self.imageURL(for: "all_sport")
+        let failure = expectation(description: "Should fail")
+        do {
+            _ = try await Whether.anyWatches(in: path)
+            XCTFail("This should fail")
+        } catch {
+            failure.fulfill()
+        }
+        await fulfillment(of: [failure], timeout: 1)
+    }
+
+}
+
+extension WhatWatchKitNetworkTests {
+    
     func addGoodStub(for image: String) {
         stub(condition: pathEndsWith(image), response: { (request) -> HTTPStubsResponse in
             let url = Bundle.module.url(forResource: image, withExtension: "png")!
