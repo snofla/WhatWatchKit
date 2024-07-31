@@ -13,13 +13,23 @@ import OHHTTPStubsSwift
 
 
 final class WhatWatchKitNetworkTests: XCTestCase {
+    
+    class override func setUp() {
+        HTTPStubs.setEnabled(true)
+    }
+    
+    class override func tearDown() {
+        HTTPStubs.removeAllStubs()
+        HTTPStubs.setEnabled(false)
+    }
 
     override func setUpWithError() throws {
-        HTTPStubs.setEnabled(true)
+        try super.setUpWithError()
     }
 
     override func tearDownWithError() throws {
-        HTTPStubs.setEnabled(false)
+        try super.tearDownWithError()
+        HTTPStubs.removeAllStubs()
     }
 
 }
