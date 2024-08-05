@@ -46,6 +46,11 @@ public struct What {
         let ourResult = [Category](modelResult).sorted()
         return ourResult
     }
+        
+    public static func categoryOfWatch(in image: CVPixelBuffer) async throws -> [Category] {
+        let input = WhatWatchModelInput(image: image)
+        let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
+        let ourResult = [Category](modelResult).sorted()
         return ourResult
     }
 
