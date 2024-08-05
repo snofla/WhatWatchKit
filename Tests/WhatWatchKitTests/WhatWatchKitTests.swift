@@ -137,6 +137,10 @@ extension WhatWatchKitTests {
         let category = try await What.categoryOfWatch(in: watchImage)
         XCTAssertTrue(category.count > 0, "Should have categories")
         XCTAssertTrue(category[0].label == .gmt, "Should have GMT")
+        #if TEST_GMT_FAR_IMAGE
+        let ciImage = CIImage(cgImage: watchImage)
+        print("\(ciImage)")
+        #endif // TEST_GMT_FAR_IMAGE
     }
 
 }
