@@ -10,14 +10,14 @@ final class WhatWatchKitTests: XCTestCase {
         let results = try await What.categoryOfWatch(at: path!)
         XCTAssert(results.count > 1)
         XCTAssert(results.first!.label == .diver)
-        let image = CIImage(contentsOf: path!)!
-        let results1 = try await What.categoryOfWatch(in: image)
-        XCTAssert(results1.count > 1)
-        XCTAssert(results1.first!.label == .diver)
-        let image3 = self.pixelBuffer(from: image)!
-        let results2 = try await What.categoryOfWatch(in: image3)
-        XCTAssert(results2.count > 1)
-        XCTAssert(results2.first!.label == .diver)
+        let cImage = CIImage(contentsOf: path!)!
+        let cImageResults = try await What.categoryOfWatch(in: cImage)
+        XCTAssert(cImageResults.count > 1)
+        XCTAssert(cImageResults.first!.label == .diver)
+        let pixelBuffer = self.pixelBuffer(from: cImage)!
+        let pixelBufferResults = try await What.categoryOfWatch(in: pixelBuffer)
+        XCTAssert(pixelBufferResults.count > 1)
+        XCTAssert(pixelBufferResults.first!.label == .diver)
     }
     
     func test_Dress() async throws {
@@ -26,14 +26,14 @@ final class WhatWatchKitTests: XCTestCase {
         let results = try await What.categoryOfWatch(at: path!)
         XCTAssert(results.count > 1)
         XCTAssert(results.first!.label == .dress)
-        let image = CIImage(contentsOf: path!)!
-        let results1 = try await What.categoryOfWatch(in: image)
-        XCTAssert(results1.count > 1)
-        XCTAssert(results1.first!.label == .dress)
-        let image3 = self.pixelBuffer(from: image)!
-        let results2 = try await What.categoryOfWatch(in: image3)
-        XCTAssert(results2.count > 1)
-        XCTAssert(results2.first!.label == .dress)
+        let cImage = CIImage(contentsOf: path!)!
+        let cImageResults = try await What.categoryOfWatch(in: cImage)
+        XCTAssert(cImageResults.count > 1)
+        XCTAssert(cImageResults.first!.label == .dress)
+        let pixelBuffer = self.pixelBuffer(from: cImage)!
+        let pixelBufferResults = try await What.categoryOfWatch(in: pixelBuffer)
+        XCTAssert(pixelBufferResults.count > 1)
+        XCTAssert(pixelBufferResults.first!.label == .dress)
     }
 
     func test_Sport() async throws {
@@ -42,14 +42,14 @@ final class WhatWatchKitTests: XCTestCase {
         let results = try await What.categoryOfWatch(at: path!)
         XCTAssert(results.count > 1)
         XCTAssert(results.first!.label == .sport)
-        let image = CIImage(contentsOf: path!)!
-        let results1 = try await What.categoryOfWatch(in: image)
-        XCTAssert(results1.count > 1)
-        XCTAssert(results1.first!.label == .sport)
-        let image3 = self.pixelBuffer(from: image)!
-        let results2 = try await What.categoryOfWatch(in: image3)
-        XCTAssert(results2.count > 1)
-        XCTAssert(results2.first!.label == .sport)
+        let cImage = CIImage(contentsOf: path!)!
+        let cImageResults = try await What.categoryOfWatch(in: cImage)
+        XCTAssert(cImageResults.count > 1)
+        XCTAssert(cImageResults.first!.label == .sport)
+        let pixelBuffer = self.pixelBuffer(from: cImage)!
+        let pixelBufferResults = try await What.categoryOfWatch(in: pixelBuffer)
+        XCTAssert(pixelBufferResults.count > 1)
+        XCTAssert(pixelBufferResults.first!.label == .sport)
     }
 
     func test_Chronograph() async throws {
@@ -58,14 +58,14 @@ final class WhatWatchKitTests: XCTestCase {
         let results = try await What.categoryOfWatch(at: path!)
         XCTAssert(results.count > 1)
         XCTAssert(results.first!.label == .chronograph)
-        let image = CIImage(contentsOf: path!)!
-        let results1 = try await What.categoryOfWatch(in: image)
-        XCTAssert(results1.count > 1)
-        XCTAssert(results1.first!.label == .chronograph)
-        let image3 = self.pixelBuffer(from: image)!
-        let results2 = try await What.categoryOfWatch(in: image3)
-        XCTAssert(results2.count > 1)
-        XCTAssert(results2.first!.label == .chronograph)
+        let cImage = CIImage(contentsOf: path!)!
+        let cImageResults = try await What.categoryOfWatch(in: cImage)
+        XCTAssert(cImageResults.count > 1)
+        XCTAssert(cImageResults.first!.label == .chronograph)
+        let pixelBuffer = self.pixelBuffer(from: cImage)!
+        let pixelBufferResults = try await What.categoryOfWatch(in: pixelBuffer)
+        XCTAssert(pixelBufferResults.count > 1)
+        XCTAssert(pixelBufferResults.first!.label == .chronograph)
     }
 
     func test_Field() async throws {
@@ -74,14 +74,14 @@ final class WhatWatchKitTests: XCTestCase {
         let results = try await What.categoryOfWatch(at: path!)
         XCTAssert(results.count > 1)
         XCTAssert(results.first!.label == .field)
-        let image = CIImage(contentsOf: path!)!
-        let results1 = try await What.categoryOfWatch(in: image)
-        XCTAssert(results1.count > 1)
-        XCTAssert(results1.first!.label == .field)
-        let image3 = self.pixelBuffer(from: image)!
-        let results2 = try await What.categoryOfWatch(in: image3)
-        XCTAssert(results2.count > 1)
-        XCTAssert(results2.first!.label == .field)
+        let cImage = CIImage(contentsOf: path!)!
+        let cImageResults = try await What.categoryOfWatch(in: cImage)
+        XCTAssert(cImageResults.count > 1)
+        XCTAssert(cImageResults.first!.label == .field)
+        let pixelBuffer = self.pixelBuffer(from: cImage)!
+        let pixelBufferResults = try await What.categoryOfWatch(in: pixelBuffer)
+        XCTAssert(pixelBufferResults.count > 1)
+        XCTAssert(pixelBufferResults.first!.label == .field)
     }
 
     func test_Pilot() async throws {
@@ -90,10 +90,10 @@ final class WhatWatchKitTests: XCTestCase {
         let results = try await What.categoryOfWatch(at: path!)
         XCTAssert(results.count > 1)
         XCTAssert(results.first!.label == .pilot)
-        let image = CIImage(contentsOf: path!)!
-        let results1 = try await What.categoryOfWatch(in: image)
-        XCTAssert(results1.count > 1)
-        XCTAssert(results1.first!.label == .pilot)
+        let cImage = CIImage(contentsOf: path!)!
+        let cImageResults = try await What.categoryOfWatch(in: cImage)
+        XCTAssert(cImageResults.count > 1)
+        XCTAssert(cImageResults.first!.label == .pilot)
     }
 
     func test_GMT() async throws {
@@ -102,14 +102,14 @@ final class WhatWatchKitTests: XCTestCase {
         let results = try await What.categoryOfWatch(at: path!)
         XCTAssert(results.count > 1)
         XCTAssert(results.first!.label == .gmt)
-        let image = CIImage(contentsOf: path!)!
-        let results1 = try await What.categoryOfWatch(in: image)
-        XCTAssert(results1.count > 1)
-        XCTAssert(results1.first!.label == .gmt)
-        let image3 = self.pixelBuffer(from: image)!
-        let results2 = try await What.categoryOfWatch(in: image3)
-        XCTAssert(results2.count > 1)
-        XCTAssert(results2.first!.label == .gmt)
+        let cImage = CIImage(contentsOf: path!)!
+        let cImageResults = try await What.categoryOfWatch(in: cImage)
+        XCTAssert(cImageResults.count > 1)
+        XCTAssert(cImageResults.first!.label == .gmt)
+        let pixelBuffer = self.pixelBuffer(from: cImage)!
+        let pixelBufferResults = try await What.categoryOfWatch(in: pixelBuffer)
+        XCTAssert(pixelBufferResults.count > 1)
+        XCTAssert(pixelBufferResults.first!.label == .gmt)
     }
 
     func imageURL(for name: String) -> URL? {
