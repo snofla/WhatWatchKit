@@ -44,12 +44,14 @@ public struct Whether {
     /// Check whether an image has watches. This uses a separate
     /// object detection neural network.
     public static func anyWatches(in image: CGImage) async throws -> Watches {
+        let originalImage = CIImage(cgImage: image)
         let input = try WhetherWatchModelInput(imageWith: image)
         let modelResult = try await self.model.prediction(input: input)
         let confidences: [Double] = (0..<modelResult.confidence.count).map { index in
             return modelResult.confidence[index].doubleValue
         }
         let inputImageSize: CGSize = {
+            // get size of image used by the model
             let width = CVPixelBufferGetWidth(input.image)
             let height = CVPixelBufferGetHeight(input.image)
             return .init(width: width, height: height)
@@ -60,20 +62,31 @@ public struct Whether {
             guard let modelRect = modelResult.coordinates[coordAt: index] else {
                 return nil
             }
-            let size = modelRect.size
-            // center, and scale width and height
+            let modelSize = modelRect.size
+            // The rectangle coords of detected objects are using the top/left coordinate
+            // system where the (x, y) components of the rectangle coords are in the center
+            // of the rectangle.
+            // The following calculation gets us the rectangle of the detected object
+            // within the original image used to detect ther 
             let rect = modelRect
-                .offsetBy(dx: -size.width / 2, dy: -size.height / 2)
+                // 1a. de-center
+                .offsetBy(dx: -modelSize.width / 2, dy: -modelSize.height / 2)
+                // 1.b scale
                 .applying(
                     .init(
                         scaleX: inputImageSize.width,
                         y: inputImageSize.height
                     )
                 )
+                // 2. translate to CIImage coordinate system
+                .applying(
+                    .init(scaleX: 1, y: -1)
+                    .translatedBy(x: 0, y: -inputImageSize.height)
+                )
             return rect
         }
         return Watches(
-            originalImage: image,
+            originalImage: originalImage,
             modelImageSize: .init(
                 width: inputImageSize.width,
                 height: inputImageSize.height
@@ -84,11 +97,11 @@ public struct Whether {
     }
     
     /// Extracts a watch from a result
-    public static func extractWatch(at index: Int, from watches: Watches) async throws -> CGImage? {
+    public static func extractWatch(at index: Int, from watches: Watches) async throws -> CIImage? {
         guard index < watches.coordinates.count else {
             return nil
         }
-        let original = CGSize(width: watches.originalImage.width, height: watches.originalImage.height)
+        let original = CGSize(width: watches.originalImage.extent.width, height: watches.originalImage.extent.height)
         let model = CGSize(width: watches.modelImageSize.width, height: watches.modelImageSize.height)
         // scale up model coords to original image coords
         let rect = watches.coordinates[index]
@@ -98,12 +111,7 @@ public struct Whether {
                     y: original.height / model.height
                 )
             )
-        let cropped = await Task {
-            return watches.originalImage.cropping(to: rect)
-        }.value
-        guard let cropped = cropped else {
-            return nil
-        }
+        let cropped = watches.originalImage.cropped(to: rect)
         return cropped
     }
     
@@ -133,7 +141,7 @@ extension Whether {
         }
         
         /// Original image
-        public let originalImage: CGImage
+        public let originalImage: CIImage
         /// Size of image created for model
         public let modelImageSize: CGSize
         /// List of confidences for each detected object
@@ -153,7 +161,7 @@ extension Whether {
 
 extension Whether.Watches: AsyncSequence {
 
-    public typealias Element = CGImage
+    public typealias Element = CIImage
     
     public func makeAsyncIterator() -> AsyncIterator {
         return Self.AsyncIterator(result: self, current: 0)
@@ -161,7 +169,7 @@ extension Whether.Watches: AsyncSequence {
         
     public struct AsyncIterator: AsyncIteratorProtocol {
         
-        public mutating func next() async -> CGImage? {
+        public mutating func next() async -> Element? {
             guard self.current < self.result.count else {
                 return nil
             }

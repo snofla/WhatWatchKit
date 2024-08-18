@@ -26,7 +26,7 @@ public struct What {
     }
     
     /// Guesses the watch from an image.
-    /// - Parameter url: URL to retrieve image from
+    /// - Parameter image: CIImage
     /// - Returns: Array of results, sorted by their confidence
     /// level.
     public static func categoryOfWatch(in image: CIImage) async throws -> [Category] {
@@ -37,16 +37,20 @@ public struct What {
     }
 
     /// Guesses the watch from an image.
-    /// - Parameter url: URL to retrieve image from
+    /// - Parameter image:
     /// - Returns: Array of results, sorted by their confidence
     /// level.
     public static func categoryOfWatch(in image: CGImage) async throws -> [Category] {
         let input = try WhatWatchModelInput(imageWith: image)
         let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
-        let ourResult = [Category](modelResult)
-            .sorted(by: { lhs, rhs in
-                return lhs.confidence > rhs.confidence
-            })
+        let ourResult = [Category](modelResult).sorted()
+        return ourResult
+    }
+        
+    public static func categoryOfWatch(in image: CVPixelBuffer) async throws -> [Category] {
+        let input = WhatWatchModelInput(image: image)
+        let modelResult: WhatWatchModelOutput = try await self.model.prediction(input: input)
+        let ourResult = [Category](modelResult).sorted()
         return ourResult
     }
 
@@ -103,6 +107,12 @@ extension Array where Element == What.Category {
             return .init(label: .init(kv.key), confidence: kv.value)
         }
         self = elements
+    }
+    
+    func sorted() -> [What.Category] {
+        return self.sorted(by: { lhs, rhs in
+            return lhs.confidence > rhs.confidence
+        })
     }
     
 }
